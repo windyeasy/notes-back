@@ -1,9 +1,10 @@
 const KoaRouter = require("@koa/router");
-const { createAvatarFile } = require("../controller/file.controller");
+const { createAvatarFile, addFile } = require("../controller/file.controller");
 const { verifyAuth } = require("../middleware/login.middleware");
 const {
   avatarHandler,
   verifySingleFile,
+  fileHandler,
 } = require("../middleware/file.middleware");
 const fileRouter = new KoaRouter({
   prefix: "/file",
@@ -18,8 +19,13 @@ fileRouter.post(
   createAvatarFile
 );
 
-// 查看头像
+// 上传文件
+fileRouter.post(
+  "/upload",
+  verifyAuth,
+  fileHandler,
+  verifySingleFile("file"),
+  addFile
+);
 
-// loginRouter.patch("/:id", verifyAuth);
-// loginRouter.delete("/:id", verifyAuth);
 module.exports = fileRouter;

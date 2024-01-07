@@ -5,21 +5,38 @@ const { FIELD_NOT_NULL } = require("../error-request/error-type");
 const fileService = require("../services/file.service");
 
 /**
+ *  通过传入文件保存路径，和网络请求提取文件内容字段，创建文件上传中间件
+ * @param {string} file_path -- 文件保存路径
+ * @param {string} singleName -- 网络请求提取文件内容字段
+ * @returns {function} -- 返回koa中间函数
+ */
+function createMulterUpload(file_path, singleName) {
+  const upload = multer({
+    storage: multer.diskStorage({
+      // 设置文件存储路径
+      destination(req, file, callback) {
+        callback(null, file_path);
+      },
+      // 设置文件名称
+      filename(_, file, callback) {
+        callback(null, Date.now() + "_" + file.originalname);
+      },
+    }),
+  });
+  return upload.single(singleName);
+}
+/**
  * 通过对multer配置生成，头像文件上传中间件
  */
-const uploadAvatar = multer({
-  storage: multer.diskStorage({
-    // 设置文件存储路径
-    destination(req, file, callback) {
-      callback(null, UPLOAD_PATH);
-    },
-    // 设置文件名称
-    filename(_, file, callback) {
-      callback(null, Date.now() + "_" + file.originalname);
-    },
-  }),
-});
-const avatarHandler = uploadAvatar.single("avatar");
+const avatarHandler = createMulterUpload(UPLOAD_PATH, "avatar");
+/**
+ * 文件上传中间件
+ */
+const fileHandler = createMulterUpload(UPLOAD_PATH, "file");
+/**
+ * markdown文件上传中间件
+ */
+// const markdownFileHandler = createMulterUpload(UPLOAD_PATH, "markdownFile");
 
 /**
  * 单文件上传，验证文件字段是否传入
@@ -54,6 +71,7 @@ async function verifyFileIsExists(ctx, next) {
 
 module.exports = {
   avatarHandler,
+  fileHandler,
   verifySingleFile,
   verifyFileIsExists,
 };

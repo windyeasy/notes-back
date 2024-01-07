@@ -5,19 +5,10 @@ const { successModel } = require("../utils/request-model");
 const fs = require("fs");
 class FileController {
   // 头像上传
-  async createAvatarFile(ctx, next) {
+  async createAvatarFile(ctx) {
     // 得到文件上传信息插入数据库
-    const { filename, mimetype, size, originalname } = ctx.file;
-    console.log(filename);
-    const userId = ctx.user.id;
-    const result = await fileService.create({
-      filename,
-      mimetype,
-      size,
-      originalname,
-      userId,
-    });
-
+    const result = await fileService.handlerUploadFile(ctx);
+    const { filename } = ctx.file;
     ctx.body = successModel({
       message: "上传头像成功!",
       data: {
@@ -26,9 +17,22 @@ class FileController {
       },
     });
   }
-  async showPicture(ctx) {
-    const { filename, mimetype } = ctx.fileInfo;
+  // 文件上传
+  async addFile(ctx) {
+    const { filename } = ctx.file;
+    const result = await fileService.handlerUploadFile(ctx);
+    ctx.body = successModel({
+      message: "上传文件成功!",
+      data: {
+        id: result.insertId,
+        path: `${SERVER_HOST_PORT}/uploads/${filename}`,
+      },
+    });
+  }
 
+  // 查看文件
+  async showFile(ctx) {
+    const { filename, mimetype } = ctx.fileInfo;
     // 读取文件
     try {
       const fileReadStream = fs.createReadStream(UPLOAD_PATH + "/" + filename);
