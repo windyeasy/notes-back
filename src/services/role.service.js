@@ -24,7 +24,7 @@ class RoleService extends BaseService {
     return !!result.length;
   }
   // 查询角色列表
-  async queryList(roleName, offset, pageSize) {
+  async queryList(roleName, offset = 0, pageSize = 10) {
     const statement = `SELECT 
       r.id id, 
       r.roleName roleName,

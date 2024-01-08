@@ -1,6 +1,6 @@
 const KoaRouter = require("@koa/router");
 const { verifyAuth } = require("../middleware/login.middleware");
-const { create, remove } = require("../controller/note.controller");
+const { create, remove, list } = require("../controller/note.controller");
 const { verifyNoteAdd } = require("../middleware/note.middleware");
 
 const noteRouter = new KoaRouter({
@@ -10,4 +10,6 @@ const noteRouter = new KoaRouter({
 noteRouter.post("/", verifyAuth, verifyNoteAdd, create);
 // 删除文章
 noteRouter.delete("/:id", verifyAuth, remove);
+// 查询文章列表
+noteRouter.get("/list", verifyAuth, list);
 module.exports = noteRouter;
