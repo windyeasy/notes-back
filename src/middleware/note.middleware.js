@@ -1,8 +1,10 @@
 const errorRequest = require("../error-request");
 const { FIELD_NOT_NULL } = require("../error-request/error-type");
 const { fetchId } = require("../utils/fetch-id");
-
-async function verifyNoteAdd(ctx, next) {
+/**
+ * 校验文章添加中间件
+ */
+async function verifyNote(ctx, next) {
   const {
     title,
     type = 1,
@@ -11,9 +13,9 @@ async function verifyNoteAdd(ctx, next) {
     fileId = null,
   } = ctx.request.body;
   if (!title) {
-    return errorRequest.throw(FIELD_NOT_NULL, ctx, "标题");
+    return errorRequest.throw(FIELD_NOT_NULL, ctx, "文章标题");
   }
-  ctx.addPayload = {
+  ctx.payload = {
     title,
     type,
     state,
@@ -23,4 +25,8 @@ async function verifyNoteAdd(ctx, next) {
   };
   await next();
 }
-module.exports = { verifyNoteAdd };
+/**
+ * 文章
+ */
+
+module.exports = { verifyNote };

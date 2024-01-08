@@ -27,6 +27,7 @@ class NoteService extends BaseService {
        from ${this.tbName} n
        LEFT JOIN user u ON n.userId = u.id 
        LEFT JOIN file f ON n.fileId = f.id 
+       order by n.createAt desc 
        LIMIT ? OFFSET ?
     `;
     const [result] = await connection.query(statement, [baseUrl, size, offset]);

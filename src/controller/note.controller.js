@@ -1,12 +1,18 @@
 const noteService = require("../services/note.service");
 const { fetchPageInfo } = require("../utils/fetch-page-info");
+const fetchParamsId = require("../utils/fetch-params-id");
 const { successModel } = require("../utils/request-model");
 
 class NoteController {
   // 添加文章
   async create(ctx) {
-    await noteService.create(ctx.addPayload);
+    await noteService.create(ctx.payload);
     ctx.body = successModel("添加文章成功！");
+  }
+  // 更新文章
+  async update(ctx) {
+    await noteService.update(fetchParamsId(ctx), ctx.payload);
+    ctx.body = successModel("更新文章成功！");
   }
   // 删除文章
   async remove(ctx) {
