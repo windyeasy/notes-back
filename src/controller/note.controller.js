@@ -1,4 +1,5 @@
 const noteService = require("../services/note.service");
+const { fetchLikeValue } = require("../utils/fetch-like-value");
 const { fetchPageInfo } = require("../utils/fetch-page-info");
 const fetchParamsId = require("../utils/fetch-params-id");
 const { successModel } = require("../utils/request-model");
@@ -23,8 +24,32 @@ class NoteController {
   async list(ctx) {
     // 获取处理过的分页信息
     const { size, offset } = fetchPageInfo(ctx);
-    const result = await noteService.queryList(offset, size);
-    const total = await noteService.fetchTotal();
+    const { title } = ctx.query;
+    const result = await noteService.queryList(title, offset, size);
+    const total = await noteService.fetchTotal(
+      "WHERE title like ?",
+      fetchLikeValue(title)
+    );
+    ctx.body = successModel({
+      message: "列表获取成功！",
+      data: {
+        list: result,
+        total,
+      },
+    });
+  }
+  /**
+   *
+   */
+  // 网站查询笔记文章
+  async queryNotes(ctx) {
+    const { size, offset } = fetchPageInfo(ctx);
+    const { title } = ctx.query;
+    const result = await noteService.queryNotes(title, offset, size);
+    const total = await noteService.fetchTotal(
+      "WHERE title like ?",
+      fetchLikeValue(title)
+    );
     ctx.body = successModel({
       message: "列表获取成功！",
       data: {
