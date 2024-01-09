@@ -17,6 +17,8 @@ class NoteService extends BaseService {
        n.content content ,
        n.fileId fileId,
        n.userId userId,
+       n.createAt createAt,
+       n.updateAt updateAt,
        JSON_OBJECT(
         'id', u.id, 
         'name', u.username, 
@@ -53,6 +55,8 @@ class NoteService extends BaseService {
        n.content content ,
        n.fileId fileId,
        n.userId userId,
+       n.createAt createAt,
+       n.updateAt updateAt,
        JSON_OBJECT(
         'id', u.id, 
         'name', u.username, 
