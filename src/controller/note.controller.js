@@ -58,6 +58,21 @@ class NoteController {
       },
     });
   }
+  // 查询文章信息
+  async queryNoteInfo(ctx) {
+    const data = await noteService.queryNoteInfo(fetchParamsId(ctx));
+    if (data && data.id) {
+      ctx.body = successModel({
+        message: "文章查询成功",
+        data: data,
+      });
+    } else {
+      ctx.body = {
+        code: -1102,
+        message: "未查询到文章信息",
+      };
+    }
+  }
 }
 
 module.exports = new NoteController();

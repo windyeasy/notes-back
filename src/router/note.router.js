@@ -6,6 +6,7 @@ const {
   list,
   update,
   queryNotes,
+  queryNoteInfo,
 } = require("../controller/note.controller");
 const { verifyNote } = require("../middleware/note.middleware");
 
@@ -20,6 +21,8 @@ noteRouter.delete("/:id", verifyAuth, remove);
 noteRouter.get("/list", verifyAuth, list);
 // 完整查询文章
 noteRouter.get("/article/list", queryNotes);
+// 查询完整文章详情
+noteRouter.get("/article/detail/:id", queryNoteInfo);
 // 更新文章
 noteRouter.patch("/:id", verifyAuth, verifyNote, update);
 module.exports = noteRouter;
