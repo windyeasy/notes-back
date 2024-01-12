@@ -19,7 +19,7 @@ const userRouter = new KoaRouter({
   prefix: "/user",
 });
 // 添加用户
-userRouter.post("/", verifyAuth, verifyUser, passwordEncryption, create);
+userRouter.post("/", verifyUser, passwordEncryption, create);
 // 删除用户
 userRouter.delete("/:id", verifyAuth, remove);
 // 编辑用户
