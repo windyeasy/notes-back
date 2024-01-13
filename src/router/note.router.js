@@ -7,6 +7,7 @@ const {
   update,
   queryNotes,
   queryNoteInfo,
+  queryResume,
 } = require("../controller/note.controller");
 const { verifyNote } = require("../middleware/note.middleware");
 
@@ -23,6 +24,9 @@ noteRouter.get("/list", verifyAuth, list);
 noteRouter.get("/article/list", queryNotes);
 // 查询完整文章详情
 noteRouter.get("/article/detail/:id", queryNoteInfo);
+// 添加获取简历文章接口
+noteRouter.get("/resume", queryResume);
 // 更新文章
 noteRouter.patch("/:id", verifyAuth, verifyNote, update);
+
 module.exports = noteRouter;

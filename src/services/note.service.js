@@ -110,6 +110,22 @@ class NoteService extends BaseService {
     const [result] = await connection.query(statement, [baseUrl, id]);
     return result[0];
   }
+  // 简历文章查询
+  async fetchResume() {
+    const statement = `Select 
+        n.id id,
+        n.title title,
+        n.type type,
+        n.content content,
+        f.filename filename
+        from ${this.tbName} n 
+        LEFT JOIN file f ON n.fileId = f.id 
+        Where n.title like '%简历%' or n.title like '%resume%'
+        order by n.createAt desc 
+    `;
+    const [result] = await connection.query(statement, []);
+    return result[0];
+  }
 }
 const noteService = new NoteService("note");
 module.exports = noteService;

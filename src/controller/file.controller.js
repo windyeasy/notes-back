@@ -1,6 +1,6 @@
-const { UPLOAD_PATH } = require("../config/path");
 const { SERVER_HOST_PORT } = require("../config/server");
 const fileService = require("../services/file.service");
+const { readUploadFile } = require("../utils/read-upload-file");
 const { successModel } = require("../utils/request-model");
 const fs = require("fs");
 class FileController {
@@ -35,7 +35,7 @@ class FileController {
     const { filename, mimetype } = ctx.fileInfo;
     // 读取文件
     try {
-      const fileReadStream = fs.createReadStream(UPLOAD_PATH + "/" + filename);
+      const fileReadStream = readUploadFile(filename);
       ctx.type = mimetype;
       ctx.body = fileReadStream;
     } catch (err) {

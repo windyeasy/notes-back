@@ -2,6 +2,10 @@ const noteService = require("../services/note.service");
 const { fetchLikeValue } = require("../utils/fetch-like-value");
 const { fetchPageInfo } = require("../utils/fetch-page-info");
 const fetchParamsId = require("../utils/fetch-params-id");
+const {
+  readUploadFile,
+  fetchReadStreamData,
+} = require("../utils/read-upload-file");
 const { successModel } = require("../utils/request-model");
 
 class NoteController {
@@ -71,6 +75,27 @@ class NoteController {
         code: -1102,
         message: "未查询到文章信息",
       };
+    }
+  }
+  // 简历文章查询
+  async queryResume(ctx) {
+    const result = await noteService.fetchResume();
+    let data = "";
+    if (result) {
+      // 文件类型就将值设置到文件里面
+      if (result.type === 1) {
+        const { filename } = result;
+        // 读取文件，以字符串的形式解析
+        const fileReadStream = readUploadFile(filename);
+        // 将文本数据以字符串的方式展示
+        const streamData = await fetchReadStreamData(fileReadStream);
+        data = streamData.toString();
+      } else {
+        data = result.content;
+      }
+      ctx.body = successModel({
+        data,
+      });
     }
   }
 }
