@@ -80,6 +80,41 @@ class NoteService extends BaseService {
     ]);
     return result;
   }
+  // 后台查询笔记详情
+  async queryNoteDetail(id) {
+    const baseUrl = fetchShowFilePath("uploads/");
+    const statement = `Select 
+       n.id id,
+       n.title title,
+       n.type type,
+       n.state state,
+       n.content content ,
+       n.fileId fileId,
+       n.userId userId,
+       n.createAt createAt,
+       n.updateAt updateAt,
+       JSON_OBJECT(
+        'id', u.id, 
+        'name', u.username, 
+        'nickname', u.nickname,
+        'telephone', u.telephone,
+        'email', u.email
+        ) as userInfo,
+        concat(?, f.filename) as contentFileUrl,
+        JSON_OBJECT(
+          'id', f.id,
+          'filename', f.filename,
+          'url', concat(?, f.filename)
+        ) as fileInfo
+       from ${this.tbName} n 
+       LEFT JOIN user u ON n.userId = u.id 
+       LEFT JOIN file f ON n.fileId = f.id 
+       Where n.id = ? 
+       order by n.createAt desc 
+    `;
+    const [result] = await connection.query(statement, [baseUrl, baseUrl, id]);
+    return result[0];
+  }
   // 查询文章信息
   async queryNoteInfo(id) {
     const baseUrl = fetchShowFilePath("uploads/");
@@ -107,9 +142,10 @@ class NoteService extends BaseService {
        Where n.id = ? and n.state=1
        order by n.createAt desc 
     `;
-    const [result] = await connection.query(statement, [baseUrl, id]);
+    const [result] = await connection.query(statement, [baseUrl, baseUrl, id]);
     return result[0];
   }
+
   // 简历文章查询
   async fetchResume() {
     const statement = `Select 
