@@ -135,7 +135,9 @@ class NoteService extends BaseService {
         'telephone', u.telephone,
         'email', u.email
         ) as userInfo,
+        f.filename filename,
         concat(?, f.filename) as contentFileUrl
+
        from ${this.tbName} n 
        LEFT JOIN user u ON n.userId = u.id 
        LEFT JOIN file f ON n.fileId = f.id 
