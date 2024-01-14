@@ -142,7 +142,7 @@ class NoteService extends BaseService {
        Where n.id = ? and n.state=1
        order by n.createAt desc 
     `;
-    const [result] = await connection.query(statement, [baseUrl, baseUrl, id]);
+    const [result] = await connection.query(statement, [baseUrl, id]);
     return result[0];
   }
 
