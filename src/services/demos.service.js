@@ -16,7 +16,12 @@ class DemosSevice extends BaseService {
        d.fileId fileId,
        d.createAt createAt,
        d.updateAt updateAt,
-       concat(?, f.filename) as coverUrl
+       concat(?, f.filename) as coverUrl,
+       JSON_OBJECT(
+        'id', f.id,
+        'filename', f.filename,
+        'url', concat(?, f.filename)
+      ) as fileInfo
        from ${this.tbName} d
        LEFT JOIN file f ON d.fileId = f.id 
        Where d.title like ?
@@ -24,6 +29,7 @@ class DemosSevice extends BaseService {
        LIMIT ? OFFSET ?
     `;
     const [result] = await connection.query(statement, [
+      baseUrl,
       baseUrl,
       fetchLikeValue(title),
       size,
