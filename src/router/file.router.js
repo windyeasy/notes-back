@@ -1,5 +1,5 @@
 const KoaRouter = require("@koa/router");
-const { createAvatarFile, addFile } = require("../controller/file.controller");
+const { createAvatarFile, addFile, getFilesByIds } = require("../controller/file.controller");
 const { verifyAuth } = require("../middleware/login.middleware");
 const {
   avatarHandler,
@@ -27,5 +27,8 @@ fileRouter.post(
   verifySingleFile("file"),
   addFile
 );
+
+// 通过文件ids获取文件信息
+fileRouter.get("/files", verifyAuth,  getFilesByIds);
 
 module.exports = fileRouter;

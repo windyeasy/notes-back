@@ -29,6 +29,15 @@ class FileController {
       },
     });
   }
+  // 通过ids获取文件
+  async getFilesByIds(ctx) {
+    const { ids } = ctx.query;
+    const result = await fileService.handlerGetFileList(ids);
+    ctx.body = successModel({
+      message: "获取文件成功!",
+      data: result,
+    });
+  }
 
   // 查看文件
   async showFile(ctx) {
