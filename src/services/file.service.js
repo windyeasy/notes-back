@@ -23,20 +23,16 @@ class FileService extends BaseService {
   // 获取文件列表通过ids
   async handlerGetFileList(ids) {
     const baseUrl = fetchShowFilePath("uploads/");
-    const result = []
+
     const statement = `Select 
       'id', f.id,
       'filename', f.filename,
       concat(?, f.filename) as url
       from ${this.tbName} f
-      Where id=?
+      Where id in (?)
       order by f.createAt desc 
     `;
-    for (const id of ids.split(',')){
-      const [data] = await connection.query(statement, [baseUrl, id]);
-      result.push(...data);
-    }
-   
+    const [result] = await connection.query(statement, [baseUrl, ids]);
     return result;
   }
 }
