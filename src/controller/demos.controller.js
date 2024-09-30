@@ -38,6 +38,15 @@ class DemosController {
       },
     });
   }
+  // 前端demos列表
+  async fetchAllList(ctx) {
+    const result = await demosSevice.queryAllList();
+    ctx.body = successModel({
+      message: "列表获取成功！",
+      data: result,
+    });
+  }
+  
 }
 
 module.exports = new DemosController();

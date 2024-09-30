@@ -1,7 +1,7 @@
 const KoaRouter = require("@koa/router");
 const { verifyAuth } = require("../middleware/login.middleware");
 const { verifyDemos } = require("../middleware/demos.middleware");
-const { create, update, remove, list } = require("../controller/demos.controller");
+const { create, update, remove, list, fetchAllList } = require("../controller/demos.controller");
 const demosRouter = new KoaRouter({
   prefix: "/demos",
 });
@@ -19,6 +19,6 @@ demosRouter.delete("/:id", verifyAuth, remove);
 demosRouter.get("/", verifyAuth, list);
 
 // 前端查询demos列表
-demosRouter.get("/queryDemos", list)
+demosRouter.get("/queryDemos", fetchAllList)
 
 module.exports = demosRouter;
